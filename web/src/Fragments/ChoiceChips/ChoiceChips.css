@@ -1,0 +1,26 @@
+.choice-chips {
+
+}
+
+.choice-chips .choice-chip {
+    font-size: 25px;
+    border: 2px solid white;
+    border-radius: 8px;
+    padding: 5px 15px 5px 15px;
+    transition: 0.2s;
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    background-color: black;
+    cursor: pointer;
+}
+
+.choice-chips .choice-chip-hover:active {
+    background-color: white;
+    color: black;
+}
+
+.active-chip {
+    background-color: white !important;
+    color: black !important;
+}

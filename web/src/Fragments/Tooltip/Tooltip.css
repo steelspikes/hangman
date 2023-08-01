@@ -1,0 +1,24 @@
+.tooltip-inner-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.tooltip-container {
+    background-color: white;
+    font-size: 20px;
+    color: black;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    padding: 8px 10px 8px 10px;
+    max-width: 300px;
+    transition: 0.4s;
+    right: 0;
+    max-width: 150px;
+    margin-top: 8px;
+    border-radius: 8px;
+}
+
+.tooltip-container-wrapper {
+    position: relative;
+}

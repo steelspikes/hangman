@@ -1,0 +1,17 @@
+.screen-modal {
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: 0.25s;
+}
+
+.show {
+    transform: translateX(0);
+}
+
+.hide {
+    transform: translateX(-100%);
+}

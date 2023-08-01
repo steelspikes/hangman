@@ -1,0 +1,107 @@
+.lobby .item-enter {
+  transform: translateX(-100%);
+}
+.lobby .item-enter-active {
+  transform: translateX(0%);
+  transition: transform 300ms;
+}
+.lobby .item-exit {
+  transform: translateX(0%);
+}
+.lobby .item-exit-active {
+  transform: translateX(-100%);
+  transition: transform 300ms;
+}
+
+.lobby h2 {
+  font-size: 30px;
+}
+
+.lobby .options p {
+  font-size: 25px;
+}
+
+.lobby .item-appear {
+    transform: translateX(-100%);
+}
+
+.lobby .item-appear-active {
+    transform: translateX(0%);
+    transition: transform 300ms;
+}
+
+.lobby .player-card {
+  height: 60px;
+  padding-top: 10px;
+} 
+
+.lobby .player-card .avatar {
+  background-color: grey;
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: left;
+}
+
+.lobby .player-card .nickname {
+  font-size: 25px;
+  color: white;
+  width: calc(100% - 60px - 100px);
+  float: left;
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 2%;
+}
+
+.lobby .player-card .nickname p {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.lobby .icon {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lobby .admin-player-options {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.lobby .container {
+    padding: 0 5% 0 5%;
+}
+
+.lobby .group-players {
+    transition: translateX(0%);
+    transition: 0.4s;
+}
+
+.lobby .room-name {
+  font-size: 30px;
+}
+
+@media only screen and (min-width: 768px) {
+    .lobby .container {
+        padding: 0 15% 0 15%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .lobby .container {
+        padding: 0 30% 0 30%;
+    }
+}
