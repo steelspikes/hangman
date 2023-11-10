@@ -29,7 +29,7 @@ export default function Main() {
             return;
         }
         
-        const res = await axios.post("http://192.168.100.8:9000/token/generate");
+        const res = await axios.post("http://localhost:9000/token/generate");
 
         if(res.status === 200) {
             localStorage.setItem('PLAYER_TOKEN', res.data.token);

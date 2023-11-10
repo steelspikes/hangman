@@ -6,7 +6,7 @@ const uuid = require('uuid');
 
 const app = express();
 
-const ALLOWED_ORIGIN = 'http://192.168.100.8:3000';
+const ALLOWED_ORIGIN = 'http://localhost:3000';
 const ALLOWED_METHODS = ['GET', 'POST'];
 const SECRET = "kwx2kNNg4ShB@5a3J4ASFgiBDq1@80j@GT5CI5AbK786iC8BTxTdGOhqQUFInA2j";
 
@@ -77,6 +77,59 @@ function hideWord(word) {
     return word.replace(/[^0-9a-z ]/gi, '').replace(/[0-9a-z]/gi, '*');
 }
 
+function getCurrentGamePlayersData(room, playerId) {
+    const currentRound =  rooms[room].currentRound;
+    let roundPlayersData =  rooms[room].games.slice(-1);
+
+    if(roundPlayersData.length > 0) {
+        roundPlayersData = roundPlayersData[currentRound - 1].players;
+    }
+
+    let players = null;
+    let playersIndexed = {};
+
+    if(playerId === null) {
+        players = Object.values(rooms[room].players);
+
+        for(let player of players) {
+            if(player.id in roundPlayersData) {
+                playersIndexed[player.id] =  {
+                    ...player,
+                    mistakes: roundPlayersData[player.id].mistakes,
+                    word: roundPlayersData[player.id].word
+                }
+            } else {
+                playersIndexed[player.id] =  {
+                    ...player,
+                    mistakes: null
+                }
+            }
+        }
+    } else {
+        players = Object.values(rooms[room].players).filter(x => x.id === playerId);
+        let player = players[0];
+
+        if(players.length > 0) {
+            if(player.id in roundPlayersData) {
+                playersIndexed[player.id] =  {
+                    ...player,
+                    mistakes: roundPlayersData[player.id].mistakes,
+                    word: roundPlayersData[player.id].word
+                }
+            } else {
+                playersIndexed[player.id] =  {
+                    ...player,
+                    mistakes: null
+                }
+            }
+        }
+    }
+
+    console.log(playersIndexed)
+
+    return playersIndexed;
+}
+
 async function manageRounds(room) {
     while(rooms[room].currentRound <= rooms[room].rounds) {
         io.to(room).emit('roundChanged', rooms[room].currentRound);
@@ -84,6 +137,7 @@ async function manageRounds(room) {
         console.log('End countdown');
         console.log('Start round');
         rooms[room].roundRunning = true;
+        io.to(room).emit('playersStatusReceived', getCurrentGamePlayersData(room, null));
         io.to(room).emit('sendWord', hideWord(rooms[room].games[rooms[room].currentRound - 1].word));
         await manageRoundCountdown(room);
         console.log('End round');
@@ -105,6 +159,7 @@ function manageGameReconnect(room, socket, playerUUID) {
 
     if(rooms[room].roundRunning) {
         //Round running
+        io.to(room).emit('playersStatusReceived', getCurrentGamePlayersData(room, null));
         socket.emit('sendWord', rooms[room].games[round - 1].players[playerUUID].word);
         socket.emit('timerChanged', rooms[room].remainingSeconds);
         socket.emit('mistake', rooms[room].games[round - 1].players[playerUUID].mistakes);
@@ -499,8 +554,10 @@ io.on('connection', socket => {
                         socket.emit('mistake', rooms[room].games[round - 1].players[playerUUID].mistakes);
                     }
                 } else {
-                    console.log('Lost')
+                    io.emit('lost');
                 }
+
+                io.to(room).emit('playersStatusChanged', getCurrentGamePlayersData(room, playerUUID));
             } else {
                 console.log('CANNOT SEND, ROUND ENDED', rooms[room].remainingSeconds);
             }

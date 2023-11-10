@@ -18,14 +18,7 @@ export default function Game() {
     const [word, setWord] = useState('');
     const [mistakes, setMistakes] = useState(0);
     const [errorMessage, setErrorMessage] = useState(null);
-    const [players, setPlayers] = useState([
-        {nickname: 'pepe23'},
-        {nickname: 'juan29'},
-        {nickname: 'sonrr'},
-        {nickname: 'heyhey24'},
-        {nickname: 'canela'},
-        {nickname: 'osiosi89'}
-    ]);
+    const [players, setPlayers] = useState({});
 
     const navigate = useNavigate();
 
@@ -62,6 +55,21 @@ export default function Game() {
         socket.on('mistake', mistakes => setMistakes(mistakes));
         socket.on('notInAGame', () => setErrorMessage("You are not in a game"));
         // socket.on('notInAGame', () => setErrorMessage(""));
+        socket.on('lost', () => alert('You lost'));
+
+        socket.on('playersStatusReceived', (playersChange) => {
+            setPlayers(playersChange);
+        });
+
+        socket.on('playersStatusChanged', (playersChange) => {
+            let copyPlayers = {...players};
+
+            for(let playerId of Object.keys(playersChange)) {
+                copyPlayers[playerId] = playersChange[playerId];
+            }
+
+            setPlayers(copyPlayers);
+        });
     }
 
     const parseTime = (d) => {
@@ -97,7 +105,7 @@ export default function Game() {
                 <div className='players'>
                     <h1>Players</h1>
                     {
-                        players.map(x => <div className='player'>
+                        Object.values(players).map(x => <div className='player'>
                             <div className='left'>
                                 <div className='avatar'>
                                     23
@@ -106,7 +114,7 @@ export default function Game() {
                             <div className='right'>
                                 <b>{x.nickname}</b>
                                 <p>Letters: 2/10</p>
-                                <p>Mistakes: 9</p>
+                                <p>Mistakes: {x.mistakes}</p>
                             </div>
                         </div>)
                     }
@@ -124,7 +132,9 @@ export default function Game() {
                         <HangmanDraw />
                     </div>
                     <div className='controls'>
-                        
+                        <h2>{parseTime(time)}</h2>
+                        <h1>{word}</h1>
+                        <h1>Mistakes {mistakes}</h1>
                         <div className='keyboard'>
                         {
                             keyboardLetters.map(letter => <button 
@@ -135,6 +145,7 @@ export default function Game() {
                             </button>)
                         }
                         </div>
+                        <button onClick={leaveGame}>Kick me out!</button>
                     </div>
                 </div>
             </div>

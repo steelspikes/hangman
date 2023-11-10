@@ -2,8 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import {
   BrowserRouter,
+  Navigate,
   Route,
-  Routes
+  Routes,
+  redirect
 } from 'react-router-dom';
 import Menu from './Screens/Menu';
 import E404 from './Screens/E404';
@@ -19,7 +21,7 @@ function App() {
   const performSocketConnection = () => {
     const token = localStorage.getItem('PLAYER_TOKEN');
   
-    setSocket(io('192.168.100.8:9000', {
+    setSocket(io('localhost:9000', {
       auth: {
         token
       }
@@ -57,9 +59,8 @@ function App() {
     }}>
       <BrowserRouter>
         <Routes>
-
           <Route path='/menu' Component={Menu} />
-          <Route path='/' Component={NewPlayer}/>
+          <Route path='/' Component={NewPlayer} />
           <Route path='/lobby/:room' Component={Lobby} />
           <Route path='/game' Component={Game} />
           <Route path='*' Component={E404} />

@@ -13,6 +13,7 @@
     width: calc(100% / 14);
     box-sizing: border-box;
     background-color: transparent;
+    box-sizing: border-box;
 }
 
 .game .keyboard {
@@ -85,11 +86,25 @@
 
     .game .players {
         flex-direction: column !important;
-        background-color: red;
         width: auto !important;
     }
 
     .game {
+        max-height: 100vh !important;
         flex-direction: row !important;
+    }
+
+    .game .keyboard .key {
+        width: calc(100% / 10);
+    }
+
+    .game .controls {
+        padding: 1.8em;        
+    }
+
+    .game .players {
+        overflow-y: auto !important;
+        overflow-x: hidden;
+        max-height: 100%;
     }
 }

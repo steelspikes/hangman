@@ -10,6 +10,9 @@ export default function Menu() {
     const { socket } = useContext(SocketContext);
 
     useEffect(() => {
+        if(!('PLAYER_TOKEN' in localStorage)) {
+            navigate('/');
+        }
         // getAvailableRooms();
     }, []);
 
